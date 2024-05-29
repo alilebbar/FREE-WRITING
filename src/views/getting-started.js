@@ -23,12 +23,15 @@ const GettingStarted = (props) => {
         { body: textInput }
       );
       setTextShow([...textShow, response.data.body]);
+
       setTextInput("");
     } catch (error) {
       console.error(error);
     }
   };
-
+  setTimeout(() => {
+    getData();
+  }, 1000);
   const getData = async () => {
     try {
       const response = await axios.get(
@@ -36,8 +39,6 @@ const GettingStarted = (props) => {
       );
       const data = response.data.map((t) => t.body);
       setTextShow(data);
-      //setTextShow(data.body);
-      //console.log(data);
     } catch (error) {
       console.error(
         "There has been a problem with your fetch operation:",
