@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import "./getting-started.css";
+import { Watch } from "react-loader-spinner";
+import io from "socket.io-client";
+
+const socket = io("https://monpremierapi.onrender.com");
 
 const GettingStarted = (props) => {
   const [textInput, setTextInput] = useState("");
   const [textShow, setTextShow] = useState([]);
+  const [spinner, setSpinner] = useState(false);
 
   const show = textShow
     .map((t, index) => {
@@ -18,27 +23,30 @@ const GettingStarted = (props) => {
     .reverse();
   const postData = async () => {
     try {
+      setSpinner(true);
       const response = await axios.post(
         "https://monpremierapi.onrender.com/Articale",
         { body: textInput }
       );
+
       setTextShow([...textShow, response.data.body]);
 
       setTextInput("");
+      setSpinner(false);
     } catch (error) {
       console.error(error);
     }
   };
-  setTimeout(() => {
-    getData();
-  }, 1000);
+
   const getData = async () => {
     try {
+      setSpinner(true);
       const response = await axios.get(
         "https://monpremierapi.onrender.com/Articale"
       );
       const data = response.data.map((t) => t.body);
       setTextShow(data);
+      setSpinner(false);
     } catch (error) {
       console.error(
         "There has been a problem with your fetch operation:",
@@ -51,6 +59,13 @@ const GettingStarted = (props) => {
   };
   useEffect(() => {
     getData();
+    socket.on("newArticale", (newArticale) => {
+      setTextShow((prevTextShow) => [...prevTextShow, newArticale]);
+    });
+
+    return () => {
+      socket.off("newArticale");
+    };
   }, []);
   return (
     <div className="getting-started-container">
@@ -94,6 +109,19 @@ const GettingStarted = (props) => {
           Button
         </button>
       </div>
+      <div style={{ position: "absolute", bottom: "25%" }}>
+        <Watch
+          visible={spinner}
+          height="80"
+          width="80"
+          radius="48"
+          color="#071205"
+          ariaLabel="watch-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+
       <div className="getting-started-container3">{show}</div>
     </div>
   );
