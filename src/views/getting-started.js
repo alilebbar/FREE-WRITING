@@ -7,9 +7,9 @@ import "./getting-started.css";
 const GettingStarted = (props) => {
   const [textInput, setTextInput] = useState("");
   const [textShow, setTextShow] = useState([]);
-  const clickHandel = () => {
-    postData();
-    getData();
+  const clickHandel = async () => {
+    await postData();
+    await getData();
   };
   const show = textShow.map((t, index) => {
     return (
