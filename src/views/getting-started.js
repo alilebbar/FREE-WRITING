@@ -30,7 +30,7 @@ const GettingStarted = (props) => {
         "https://monpremierapi.onrender.com/Articale",
         { body: textInput }
       );
-      await getData();
+
       setTextInput("");
       setSpinner(false);
     } catch (error) {
@@ -59,6 +59,11 @@ const GettingStarted = (props) => {
 
   const clickHandel = () => {
     postData();
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      clickHandel();
+    }
   };
 
   useEffect(() => {
@@ -104,6 +109,7 @@ const GettingStarted = (props) => {
           onChange={(e) => {
             setTextInput(e.target.value);
           }}
+          onKeyDown={handleKeyDown}
         />
         <button
           disabled={textInput === ""}
