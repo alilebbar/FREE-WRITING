@@ -3,8 +3,9 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import "./getting-started.css";
 import { Watch } from "react-loader-spinner";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
+// Connect to the server
 const socket = io("https://monpremierapi.onrender.com");
 
 const GettingStarted = (props) => {
@@ -21,6 +22,7 @@ const GettingStarted = (props) => {
       );
     })
     .reverse();
+
   const postData = async () => {
     try {
       setSpinner(true);
@@ -28,13 +30,12 @@ const GettingStarted = (props) => {
         "https://monpremierapi.onrender.com/Articale",
         { body: textInput }
       );
-
-      setTextShow([...textShow, response.data.body]);
-
+      await getData();
       setTextInput("");
       setSpinner(false);
     } catch (error) {
       console.error(error);
+      setSpinner(false);
     }
   };
 
@@ -52,21 +53,25 @@ const GettingStarted = (props) => {
         "There has been a problem with your fetch operation:",
         error
       );
+      setSpinner(false);
     }
   };
+
   const clickHandel = () => {
     postData();
   };
+
   useEffect(() => {
     getData();
     socket.on("newArticale", (newArticale) => {
-      setTextShow((prevTextShow) => [...prevTextShow, newArticale]);
+      setTextShow((prevTextShow) => [...prevTextShow, newArticale.body]);
     });
 
     return () => {
       socket.off("newArticale");
     };
   }, []);
+
   return (
     <div className="getting-started-container">
       <Helmet>
@@ -101,9 +106,9 @@ const GettingStarted = (props) => {
           }}
         />
         <button
-          disabled={textInput === "" ? "disabled" : ""}
+          disabled={textInput === ""}
           type="button"
-          className={"getting-started-button button"}
+          className="getting-started-button button"
           onClick={clickHandel}
         >
           Button
