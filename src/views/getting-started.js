@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-
 import "./getting-started.css";
 
 const GettingStarted = (props) => {
   const [textInput, setTextInput] = useState("");
   const [textShow, setTextShow] = useState([]);
-  const clickHandel = async () => {
-    await postData();
-    await getData();
-  };
-  const show = textShow.map((t, index) => {
-    return (
-      <span key={index} className="getting-started-text01">
-        {t}
-      </span>
-    );
-  });
+
+  const show = textShow
+    .map((t, index) => {
+      return (
+        <span key={index} className="getting-started-text01">
+          {t}
+        </span>
+      );
+    })
+    .reverse();
   const postData = async () => {
     try {
       const response = await axios.post(
         "https://monpremierapi.onrender.com/Articale",
         { body: textInput }
       );
+      setTextShow([...textShow, response.data.body]);
       setTextInput("");
     } catch (error) {
       console.error(error);
@@ -45,6 +44,9 @@ const GettingStarted = (props) => {
         error
       );
     }
+  };
+  const clickHandel = () => {
+    postData();
   };
   useEffect(() => {
     getData();
@@ -72,6 +74,7 @@ const GettingStarted = (props) => {
       </div>
       <div className="getting-started-container2">
         <input
+          minLength="5"
           maxLength="300"
           type="text"
           placeholder="write"
@@ -82,8 +85,9 @@ const GettingStarted = (props) => {
           }}
         />
         <button
+          disabled={textInput === "" ? "disabled" : ""}
           type="button"
-          className="getting-started-button button"
+          className={"getting-started-button button"}
           onClick={clickHandel}
         >
           Button
