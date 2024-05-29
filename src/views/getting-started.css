@@ -121,12 +121,18 @@
   }
   .getting-started-container2 {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 7px 0;
   }
 }
 
 /* Media Queries pour les tablettes et les petits ordinateurs */
-@media screen and (min-width: 601px) and (max-width: 1024px) {
+@media screen and (max-width: 423px) {
   .container {
     width: 90%; /* Largeur réduite pour les écrans moyens */
+  }
+  .getting-started-container2 {
+    width: 100%;
   }
 }
