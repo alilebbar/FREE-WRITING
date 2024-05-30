@@ -80,7 +80,8 @@ const GettingStarted = (props) => {
   return (
     <div className="getting-started-container">
       <Helmet>
-        <title>Intro to teleportHQ</title>
+        <title>FREE WRITING</title>
+
         <meta
           name="description"
           content="This project will introduce you to the capabilities of teleportHQ. Learn to navigate around the app and go through the main features with us."
