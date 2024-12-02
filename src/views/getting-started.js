@@ -116,7 +116,7 @@ const GettingStarted = (props) => {
           disabled={textInput === ""}
           type="button"
           className="getting-started-button button"
-          onClick={clickHandel}
+          onKeyDown={clickHandel}
         >
           Button
         </button>
